@@ -15,10 +15,25 @@ public class HelloWorldController {
 	public static int count;
 
 	public static boolean degradePerformance;
+	public static long waitTime;
+	static {
+		waitTime = 100000l;
+	}
 	
 	@RequestMapping("/status")
 	public String status() {
 		return "Applicaiton deployed on AWS beanstalk";
+	}
+
+	@RequestMapping("/waitTime")
+	public Long waitTime(@RequestParam Long waitTime) {
+		HelloWorldController.waitTime = waitTime;
+		return waitTime;
+	}
+
+	@RequestMapping("/getWaitTime")
+	public Long waitTime() {
+		return waitTime;
 	}
 
 	@RequestMapping("/perf")
@@ -36,7 +51,7 @@ public class HelloWorldController {
 
 		if (degradePerformance) {
 			String s = "TestTestTest";
-			for (long j=0; j<=30000l; j++) {
+			for (long j=0; j <= waitTime; j++) {
 				s = s + j;
 			}
 		}
@@ -51,6 +66,7 @@ public class HelloWorldController {
 
 		stopWatch.stop();
 		System.out.println("Elapsed Time in minutes: " + stopWatch.getLastTaskTimeMillis());
+		
 
 		return cars;
 	}
